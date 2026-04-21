@@ -1,0 +1,1561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; frame-src https://www.youtube-nocookie.com https://www.youtube.com https://youtube.com; img-src 'self' data: https:;">
+<title>Neuromorphic Computing — Presentation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c10;
+    --surface: #11141a;
+    --surface2: #181c24;
+    --border: #1e2430;
+    --accent: #00c9a7;
+    --accent2: #5b8dee;
+    --accent4: #f7c59f;
+    --text: #e8eaf0;
+    --muted: #7a8499;
+    --heading: #ffffff;
+    --notes-bg: #0e1a14;
+    --notes-border: #1a3028;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,201,167,.15) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 80% 80%, rgba(91,141,238,.12) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Cg stroke='%2300c9a7' stroke-width='0.4' opacity='0.18'%3E%3Cline x1='100' y1='150' x2='300' y2='200'/%3E%3Cline x1='300' y1='200' x2='500' y2='120'/%3E%3Cline x1='500' y1='120' x2='700' y2='250'/%3E%3Cline x1='300' y1='200' x2='400' y2='380'/%3E%3Cline x1='400' y1='380' x2='600' y2='400'/%3E%3Cline x1='600' y1='400' x2='700' y2='250'/%3E%3Cline x1='100' y1='150' x2='200' y2='350'/%3E%3Cline x1='200' y1='350' x2='400' y2='380'/%3E%3Cline x1='500' y1='120' x2='400' y2='380'/%3E%3Cline x1='150' y1='480' x2='400' y2='380'/%3E%3Cline x1='150' y1='480' x2='200' y2='350'/%3E%3C/g%3E%3Cg fill='%2300c9a7' opacity='0.3'%3E%3Ccircle cx='100' cy='150' r='4'/%3E%3Ccircle cx='300' cy='200' r='5'/%3E%3Ccircle cx='500' cy='120' r='4'/%3E%3Ccircle cx='700' cy='250' r='3'/%3E%3Ccircle cx='400' cy='380' r='6'/%3E%3Ccircle cx='600' cy='400' r='4'/%3E%3Ccircle cx='200' cy='350' r='3'/%3E%3Ccircle cx='150' cy='480' r='3'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: cover;
+    background-position: center;
+    pointer-events: none;
+    opacity: .6;
+  }
+  .hero-eyebrow {
+    font-family: 'Syne', sans-serif;
+    font-size: .75rem; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 1.5rem;
+    opacity: 0; animation: fadeUp .6s .2s ease forwards;
+  }
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.4rem, 7vw, 5.5rem); font-weight: 800;
+    color: var(--heading); line-height: 1.05; letter-spacing: -.02em;
+    max-width: 900px; opacity: 0; animation: fadeUp .7s .35s ease forwards;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero-sub {
+    max-width: 560px; color: var(--muted); font-size: 1.05rem;
+    margin-top: 1.5rem; font-weight: 300;
+    opacity: 0; animation: fadeUp .7s .5s ease forwards;
+  }
+  .hero-meta {
+    margin-top: 2.5rem; display: flex; gap: 1.5rem;
+    flex-wrap: wrap; justify-content: center;
+    opacity: 0; animation: fadeUp .7s .65s ease forwards;
+  }
+  .hero-pill {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 2rem; padding: .4rem 1.1rem; font-size: .78rem;
+    color: var(--muted); font-family: 'Syne', sans-serif;
+    letter-spacing: .06em; text-transform: uppercase;
+  }
+  .hero-presenters {
+    margin-top: 1.5rem;
+    display: flex; align-items: center; gap: .75rem;
+    opacity: 0; animation: fadeUp .7s .8s ease forwards;
+  }
+  .hero-presenter {
+    font-family: 'Syne', sans-serif; font-size: .95rem; font-weight: 700;
+    color: var(--text); letter-spacing: .04em;
+  }
+  .hero-presenter-divider { color: var(--accent); font-size: 1rem; }
+
+  /* ─── NAV ─── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,12,16,.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: .75rem 2rem; display: flex; gap: .5rem;
+    overflow-x: auto; justify-content: center; flex-wrap: wrap;
+  }
+  nav a {
+    font-family: 'Syne', sans-serif; font-size: .7rem; font-weight: 600;
+    letter-spacing: .08em; text-transform: uppercase; text-decoration: none;
+    color: var(--muted); padding: .4rem .9rem; border-radius: .3rem;
+    transition: color .2s, background .2s; white-space: nowrap;
+  }
+  nav a:hover { color: var(--accent); background: rgba(0,201,167,.07); }
+
+  /* ─── SECTION SHELL ─── */
+  section {
+    max-width: 900px; margin: 0 auto; padding: 5rem 2rem;
+  }
+  .section-label {
+    font-family: 'Syne', sans-serif; font-size: .7rem;
+    letter-spacing: .22em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 1rem;
+    display: flex; align-items: center; gap: .6rem;
+    background: rgba(0,201,167,.06);
+    border: 1px solid rgba(0,201,167,.15);
+    border-radius: 2rem;
+    padding: .35rem 1rem;
+    width: fit-content;
+  }
+  .section-label::after { display: none; }
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.7rem, 4vw, 2.6rem); font-weight: 800;
+    color: var(--heading); line-height: 1.15; letter-spacing: -.02em;
+    margin-bottom: 1.75rem;
+  }
+  h3 {
+    font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700;
+    color: var(--heading); margin: 2rem 0 .75rem;
+  }
+
+  /* ─── BULLET LIST (slide content) ─── */
+  .slide-bullets {
+    list-style: none; margin: 0 0 1.5rem; padding: 0;
+    display: flex; flex-direction: column; gap: .6rem;
+  }
+  .slide-bullets li {
+    display: flex; align-items: flex-start; gap: .75rem;
+    font-size: .975rem; color: var(--text); line-height: 1.55;
+  }
+  .slide-bullets li::before {
+    content: '▸'; color: var(--accent); font-size: .75rem;
+    margin-top: .25rem; flex-shrink: 0;
+  }
+  .slide-bullets li strong { color: var(--heading); font-weight: 600; }
+
+  /* ─── SUPERSCRIPT CITATIONS ─── */
+  sup.cite a {
+    color: var(--accent2);
+    text-decoration: none;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+  }
+  sup.cite a:hover { text-decoration: underline; color: var(--accent); }
+
+  /* ─── SPEAKER NOTES ─── */
+  .notes-toggle {
+    display: flex; align-items: center; gap: .5rem; cursor: pointer;
+    border: none; background: none; padding: .5rem 0;
+    color: var(--muted); font-family: 'Syne', sans-serif;
+    font-size: .68rem; font-weight: 700; letter-spacing: .12em;
+    text-transform: uppercase; margin-bottom: .25rem;
+    transition: color .2s;
+  }
+  .notes-toggle:hover { color: var(--accent); }
+  .notes-toggle .arrow {
+    display: inline-block; transition: transform .25s; font-size: .7rem;
+  }
+  .notes-toggle.open .arrow { transform: rotate(90deg); }
+  .notes-toggle .icon { opacity: .7; font-size: .85rem; }
+
+  .notes-body {
+    display: none;
+    background: var(--notes-bg);
+    border: 1px solid var(--notes-border);
+    border-radius: .6rem;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2rem;
+    font-size: .88rem;
+    color: #9ab8a8;
+    line-height: 1.75;
+  }
+  .notes-body.open { display: block; }
+  .notes-body p { margin-bottom: .85rem; color: #9ab8a8; }
+  .notes-body p:last-child { margin-bottom: 0; }
+  .notes-body strong { color: #c5e0d4; }
+  .notes-body em { color: #b8d4c8; font-style: italic; }
+  .notes-key-line {
+    background: rgba(0,201,167,.08);
+    border: 1px solid rgba(0,201,167,.2);
+    border-radius: .4rem;
+    padding: .6rem .9rem;
+    margin-bottom: 1rem !important;
+    color: #c5e0d4 !important;
+    font-size: .85rem !important;
+  }
+
+  /* ─── CALLOUT ─── */
+  .callout {
+    background: var(--surface); border-left: 3px solid var(--accent2);
+    border-radius: .5rem; padding: 1rem 1.35rem; margin: 1.5rem 0;
+    font-style: italic; color: var(--muted); font-size: .9rem;
+  }
+  .callout cite {
+    display: block; margin-top: .4rem; font-style: normal;
+    font-size: .75rem; color: var(--accent2);
+    font-family: 'Syne', sans-serif; font-weight: 600;
+  }
+
+  /* ─── CARD GRID ─── */
+  .card-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem; margin: 1.25rem 0 1.75rem;
+  }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: .75rem; padding: 1.25rem; position: relative;
+    overflow: hidden; transition: border-color .25s, transform .25s;
+  }
+  .card:hover { border-color: var(--accent); transform: translateY(-3px); }
+  .card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    opacity: 0; transition: opacity .25s;
+  }
+  .card:hover::before { opacity: 1; }
+  .card-icon { font-size: 1.5rem; margin-bottom: .6rem; }
+  .card h4 {
+    font-family: 'Syne', sans-serif; font-size: .85rem; font-weight: 700;
+    color: var(--heading); margin-bottom: .3rem;
+  }
+  .card p { font-size: .82rem; color: var(--muted); margin: 0; }
+
+  /* ─── COMPARE TABLE ─── */
+  .compare-table {
+    width: 100%; border-collapse: collapse; margin: 1rem 0 .5rem; font-size: .85rem;
+  }
+  .compare-table th {
+    background: var(--surface2); color: var(--heading);
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: .7rem; letter-spacing: .1em; text-transform: uppercase;
+    padding: .75rem 1rem; text-align: left; border-bottom: 2px solid var(--accent);
+  }
+  .compare-table td {
+    padding: .65rem 1rem; border-bottom: 1px solid var(--border);
+    color: var(--text); vertical-align: top;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:hover td { background: var(--surface); }
+  .table-note { font-size: .73rem; color: var(--muted); margin: .25rem 0 1.5rem; }
+
+  .tag {
+    display: inline-block; background: rgba(0,201,167,.12);
+    color: var(--accent); border-radius: 2rem; padding: .12rem .6rem;
+    font-size: .68rem; font-family: 'Syne', sans-serif; font-weight: 600;
+    letter-spacing: .06em;
+  }
+
+  /* ─── TIMELINE ─── */
+  .timeline { position: relative; padding-left: 2rem; margin: 1.25rem 0 1.75rem; }
+  .timeline::before {
+    content: ''; position: absolute; left: .45rem; top: 0; bottom: 0;
+    width: 2px; background: linear-gradient(to bottom, var(--accent), var(--accent2), transparent);
+  }
+  .timeline-item { position: relative; margin-bottom: 1.5rem; }
+  .timeline-item::before {
+    content: ''; position: absolute; left: -1.575rem; top: .35rem;
+    width: .65rem; height: .65rem; border-radius: 50%;
+    background: var(--accent); box-shadow: 0 0 0 3px rgba(0,201,167,.2);
+  }
+  .timeline-item strong {
+    font-family: 'Syne', sans-serif; font-size: .72rem;
+    color: var(--accent); letter-spacing: .08em; text-transform: uppercase;
+  }
+  .timeline-item p { margin: .15rem 0 0; font-size: .88rem; color: var(--text); }
+
+  /* ─── STAT ROW ─── */
+  .stat-row { display: flex; gap: 1.25rem; flex-wrap: wrap; margin: 1.5rem 0; }
+  .stat-box {
+    flex: 1 1 150px; background: var(--surface); border: 1px solid var(--border);
+    border-radius: .75rem; padding: 1.1rem 1rem; text-align: center;
+  }
+  .stat-box .num {
+    font-family: 'Syne', sans-serif; font-size: 1.65rem; font-weight: 800;
+    color: var(--accent); line-height: 1;
+  }
+  .stat-box .label { font-size: .72rem; color: var(--muted); margin-top: .3rem; }
+
+  /* ─── APP GRID ─── */
+  .app-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: .9rem; margin: 1.25rem 0 1.75rem;
+  }
+  .app-item {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: .75rem; padding: 1.1rem; text-align: center;
+    transition: border-color .2s, transform .2s;
+  }
+  .app-item:hover { border-color: var(--accent2); transform: translateY(-3px); }
+  .app-item .app-icon { font-size: 1.75rem; margin-bottom: .5rem; }
+  .app-item h4 {
+    font-family: 'Syne', sans-serif; font-size: .75rem; font-weight: 700;
+    color: var(--heading); margin-bottom: .2rem;
+  }
+  .app-item p { font-size: .73rem; color: var(--muted); margin: 0; }
+
+  /* ─── THEOLOGY BUILT-OUT STYLES ─── */
+  .theo-block {
+    border-radius: .85rem;
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+  .theo-a {
+    background: linear-gradient(135deg, #0e1a10 0%, #111a14 100%);
+    border: 1px solid #1e3a22;
+  }
+  .theo-b {
+    background: linear-gradient(135deg, #1a1408 0%, #1a160a 100%);
+    border: 1px solid #3a2e10;
+  }
+  .theo-header {
+    display: flex; align-items: center; gap: .85rem;
+    margin-bottom: 1.5rem;
+  }
+  .theo-icon { font-size: 1.75rem; }
+  .theo-header h3 {
+    font-family: 'Syne', sans-serif; font-size: 1.15rem; font-weight: 800;
+    color: var(--heading); margin: 0;
+  }
+  .theo-verse-row {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1.25rem; margin-bottom: 1.25rem;
+  }
+  .theo-verse {
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: .6rem; padding: 1.1rem 1.25rem;
+  }
+  .theo-ref {
+    font-family: 'Syne', sans-serif; font-size: .72rem; font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: .5rem;
+  }
+  .theo-verse > p:first-of-type {
+    font-style: italic; font-size: .88rem;
+    color: #b8d4b8; margin-bottom: .75rem; line-height: 1.55;
+  }
+  .theo-apply {
+    font-size: .83rem; color: var(--muted); line-height: 1.6; margin: 0 !important;
+  }
+  .theo-divider-box {
+    background: rgba(0,201,167,.06);
+    border: 1px solid rgba(0,201,167,.2);
+    border-left: 3px solid var(--accent);
+    border-radius: .6rem; padding: 1.25rem 1.5rem; margin-top: .5rem;
+  }
+  .theo-divider-label {
+    display: block; font-family: 'Syne', sans-serif; font-size: .7rem;
+    font-weight: 700; letter-spacing: .15em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: .6rem;
+  }
+  .theo-divider-box p {
+    font-size: .9rem; color: var(--text); line-height: 1.65; margin: 0;
+  }
+  .theo-divider-box strong { color: var(--accent); }
+
+  /* 5b reflection grid */
+  .theo-reflection-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1rem; margin-bottom: 1.5rem;
+  }
+  .theo-r-card {
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: .6rem; padding: 1.1rem 1.25rem;
+  }
+  .theo-r-icon { font-size: 1.3rem; margin-bottom: .5rem; }
+  .theo-r-card h4 {
+    font-family: 'Syne', sans-serif; font-size: .85rem; font-weight: 700;
+    color: var(--heading); margin-bottom: .4rem;
+  }
+  .theo-r-card p { font-size: .82rem; color: var(--muted); margin: 0; line-height: 1.6; }
+  .theo-r-question {
+    border: 1px solid rgba(247,197,159,.25) !important;
+    background: rgba(247,197,159,.04) !important;
+  }
+  .theo-r-question h4 { color: var(--accent4) !important; }
+  .theo-r-question p em { color: #e8d4a0; font-style: italic; }
+
+  .theo-closing {
+    background: rgba(247,197,159,.05);
+    border: 1px solid rgba(247,197,159,.18);
+    border-left: 3px solid var(--accent4);
+    border-radius: .6rem; padding: 1.25rem 1.5rem;
+  }
+  .theo-closing > p:first-child {
+    font-style: italic; font-size: .9rem;
+    color: var(--accent4); margin-bottom: .75rem;
+  }
+  .theo-closing-body {
+    font-size: .88rem; color: var(--muted); line-height: 1.7; margin: 0 !important;
+  }
+
+  @media (max-width: 680px) {
+    .theo-verse-row { grid-template-columns: 1fr; }
+    .theo-reflection-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ─── REFERENCES ─── */
+  .references-wrap { background: var(--surface); border-top: 1px solid var(--border); }
+  .references-wrap section { padding-top: 4rem; padding-bottom: 4rem; }
+  .ref-list { list-style: none; counter-reset: ref; margin-top: 1.25rem; }
+  .ref-list li {
+    counter-increment: ref; padding: .65rem 0 .65rem 2.5rem;
+    position: relative; border-bottom: 1px solid var(--border);
+    font-size: .82rem; color: var(--muted); line-height: 1.55;
+  }
+  .ref-list li:last-child { border-bottom: none; }
+  .ref-list li::before {
+    content: counter(ref) "."; position: absolute; left: 0; top: .75rem;
+    color: var(--accent); font-family: 'Syne', sans-serif;
+    font-weight: 700; font-size: .72rem;
+  }
+  .ref-section-label {
+    font-family: 'Syne', sans-serif; font-size: .63rem; letter-spacing: .15em;
+    text-transform: uppercase; color: var(--muted);
+    border-top: 1px solid var(--border); padding-top: 1.25rem;
+    margin-top: 1.5rem; margin-bottom: .25rem;
+  }
+  .ref-list a { color: var(--accent2); text-decoration: none; word-break: break-all; }
+  .ref-list a:hover { text-decoration: underline; }
+
+  /* ─── DIVIDER ─── */
+  .section-divider {
+    border: none;
+    height: 3rem;
+    background: linear-gradient(to bottom, transparent, rgba(0,201,167,.04), transparent);
+    margin: 0;
+  }
+
+  /* ─── Q1 GAMMA LAYOUT ─── */
+  .q1-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: center;
+    margin: 1.5rem 0 0;
+  }
+  .q1-left { display: flex; flex-direction: column; gap: .6rem; }
+  .q1-left .video-thumb-link { border-radius: .6rem; overflow: hidden; }
+  .q1-video-label {
+    font-size: .78rem; color: var(--muted); margin-top: .1rem;
+  }
+  .q1-right {}
+  .q1-definition {
+    font-size: 1.05rem; line-height: 1.65; color: var(--text);
+    margin: 0;
+  }
+  .q1-definition strong { color: var(--heading); }
+  .q1-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1.25rem;
+  }
+  .q1-card {
+    background: var(--surface);
+    border: 1px solid #3a4a2a;
+    border-left: 3px solid #7a9a4a;
+    border-radius: .6rem;
+    padding: 1.1rem 1.25rem;
+  }
+  .q1-card h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: .9rem; font-weight: 700;
+    color: var(--heading); margin-bottom: .4rem;
+  }
+  .q1-card p { font-size: .85rem; color: var(--muted); margin: 0; }
+
+  /* ─── Q2 GAMMA LAYOUT ─── */
+  .q2-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 0;
+    min-height: 400px;
+    margin: 1.5rem -2rem;
+    border-radius: .75rem;
+    overflow: hidden;
+  }
+  .q2-left { position: relative; min-height: 380px; }
+  .q2-neural-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 60% at 40% 55%, rgba(180,140,20,.25) 0%, transparent 65%),
+      radial-gradient(ellipse 80% 80% at 50% 50%, rgba(0,30,10,.95) 0%, transparent 100%),
+      #050e05;
+  }
+  /* Neural network SVG pattern overlay */
+  .q2-neural-bg::after {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(circle 2px at 30% 25%, rgba(180,150,30,.8) 0%, transparent 2px),
+      radial-gradient(circle 2px at 55% 45%, rgba(180,150,30,.8) 0%, transparent 2px),
+      radial-gradient(circle 2px at 45% 70%, rgba(180,150,30,.6) 0%, transparent 2px),
+      radial-gradient(circle 2px at 70% 30%, rgba(180,150,30,.5) 0%, transparent 2px),
+      radial-gradient(circle 2px at 20% 60%, rgba(180,150,30,.5) 0%, transparent 2px),
+      radial-gradient(circle 3px at 50% 50%, rgba(220,180,40,1) 0%, transparent 3px),
+      radial-gradient(circle 1.5px at 65% 65%, rgba(180,150,30,.6) 0%, transparent 1.5px),
+      radial-gradient(circle 1.5px at 35% 40%, rgba(180,150,30,.6) 0%, transparent 1.5px);
+  }
+  .q2-right {
+    background: var(--surface);
+    padding: 1.5rem 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    justify-content: center;
+  }
+  .q2-card {
+    border-radius: .6rem;
+    padding: .9rem 1.1rem;
+  }
+  .q2-card h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: .88rem; font-weight: 700;
+    margin-bottom: .3rem;
+  }
+  .q2-card p { font-size: .82rem; margin: 0; line-height: 1.5; }
+  .q2-c1 { background: #4a5e30; }
+  .q2-c1 h4, .q2-c1 p { color: #e8f0d8; }
+  .q2-c2 { background: #3d5228; }
+  .q2-c2 h4, .q2-c2 p { color: #deeac8; }
+  .q2-c3 { background: #7a6020; }
+  .q2-c3 h4, .q2-c3 p { color: #f5e8c0; }
+  .q2-c4 { background: #8a6e30; }
+  .q2-c4 h4, .q2-c4 p { color: #f0e0b8; }
+  .q2-card strong { color: #fff; font-weight: 700; }
+
+  /* ─── ALTERNATING TIMELINE ─── */
+  .timeline-alt {
+    position: relative;
+    margin: 1.5rem 0 2rem;
+    padding: 0;
+  }
+  .tl-line {
+    position: absolute;
+    left: 50%; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, #5a7a35, #8a7030, #5a7a35);
+    transform: translateX(-50%);
+    z-index: 0;
+  }
+  .tl-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+  }
+  .tl-left {
+    flex-direction: row;
+    padding-right: calc(50% + 1.5rem);
+  }
+  .tl-right {
+    flex-direction: row;
+    padding-left: calc(50% + 1.5rem);
+  }
+  .tl-left .tl-content { text-align: right; }
+  .tl-right .tl-content { text-align: left; }
+  .tl-content { flex: 1; }
+  .tl-era {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem; font-weight: 700;
+    color: var(--heading); margin-bottom: .25rem;
+  }
+  .tl-content p { font-size: .85rem; color: var(--muted); margin: 0; line-height: 1.5; }
+  .tl-node {
+    position: absolute;
+    left: 50%; top: 0;
+    transform: translateX(-50%);
+    width: 2rem; height: 2rem;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: .8rem; font-weight: 800;
+    color: #fff; flex-shrink: 0;
+  }
+  .tl-n1 { background: #4a6830; }
+  .tl-n2 { background: #7a8a30; }
+  .tl-n3 { background: #8a7030; }
+  .tl-n4 { background: #7a5a28; }
+  .tl-n5 { background: #4a6830; }
+
+  /* ─── VIDEO EMBED ─── */
+  .video-embed-wrap {
+    margin: 2rem 0 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: .75rem;
+    overflow: hidden;
+  }
+  .video-label {
+    display: flex; align-items: center; gap: .6rem;
+    padding: .75rem 1.1rem .6rem;
+    font-family: 'Syne', sans-serif; font-size: .68rem; font-weight: 700;
+    letter-spacing: .12em; text-transform: uppercase; color: var(--accent);
+    border-bottom: 1px solid var(--border);
+  }
+  .video-label span { color: var(--muted); font-weight: 400; text-transform: none; letter-spacing: 0; font-family: 'DM Sans', sans-serif; font-size: .8rem; }
+  .video-label .vid-icon { font-size: 1rem; }
+  .video-responsive {
+    position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;
+  }
+  .video-responsive iframe {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    border: none;
+  }
+  .video-thumb-link {
+    display: block; position: relative; overflow: hidden;
+    cursor: pointer; text-decoration: none;
+    background: #000;
+  }
+  .video-thumb-link img {
+    display: block; width: 100%; aspect-ratio: 16/9;
+    object-fit: cover; opacity: .88;
+    transition: opacity .25s, transform .3s;
+  }
+  .video-thumb-link:hover img { opacity: .7; transform: scale(1.02); }
+  .video-play-btn {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,.5));
+    transition: transform .2s;
+    pointer-events: none;
+  }
+  .video-thumb-link:hover .video-play-btn { transform: translate(-50%, -50%) scale(1.12); }
+  .video-timestamp-badge {
+    position: absolute; bottom: .75rem; right: .75rem;
+    background: rgba(0,0,0,.75); color: #fff;
+    font-family: 'Syne', sans-serif; font-size: .72rem; font-weight: 700;
+    letter-spacing: .06em; padding: .3rem .7rem; border-radius: .3rem;
+    pointer-events: none;
+  }
+  .video-caption {
+    padding: .6rem 1.1rem .75rem;
+    font-size: .75rem; color: var(--muted);
+    border-top: 1px solid var(--border);
+  }
+  .video-caption strong { color: var(--text); }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 600px) {
+    nav { justify-content: flex-start; }
+    section { padding: 3rem 1.25rem; }
+    .theology-section { padding: 2rem 1.25rem; }
+    .q1-layout { grid-template-columns: 1fr; }
+    .q1-cards { grid-template-columns: 1fr; }
+    .q2-layout { grid-template-columns: 1fr; margin: 1.5rem 0; }
+    .q2-left { min-height: 200px; }
+    .tl-left { padding-right: 0; flex-direction: column; }
+    .tl-right { padding-left: 0; flex-direction: column; }
+    .tl-line { display: none; }
+    .tl-node { position: static; transform: none; margin-bottom: .5rem; }
+    .tl-left .tl-content, .tl-right .tl-content { text-align: left; }
+    .theo-verse-row { grid-template-columns: 1fr; }
+    .theo-reflection-grid { grid-template-columns: 1fr; }
+    .vs-grid { grid-template-columns: 1fr; }
+    .vs-divider-el { display: none; }
+    .section-stat-callout { flex-direction: column; }
+    .ssc-divider { width: 100%; height: 1px; }
+    .closing-questions { padding: 0 .5rem; }
+  }
+
+  /* ─── Q4 OVERVIEW LAYOUT ─── */
+  .q4-overview {
+    display: grid; grid-template-columns: 1fr 1.4fr;
+    gap: 1.5rem; margin: 1.25rem 0 1.75rem; align-items: center;
+  }
+  .q4-stat-pair {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: .85rem; padding: 1.5rem 1.25rem; text-align: center;
+  }
+  .q4-stat { display: flex; flex-direction: column; align-items: center; gap: .3rem; }
+  .q4-stat-num {
+    font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800;
+    color: var(--muted); line-height: 1;
+  }
+  .q4-stat-future { color: var(--accent); }
+  .q4-stat-arrow {
+    font-size: 1.5rem; color: var(--accent2); font-weight: 700; line-height: 1;
+  }
+  .q4-stat-label {
+    font-size: .72rem; color: var(--muted); margin-top: .4rem; line-height: 1.4;
+  }
+  .q4-points { display: flex; flex-direction: column; gap: .6rem; }
+  .q4-point {
+    display: flex; align-items: flex-start; gap: .85rem;
+    background: var(--surface); border: 1px solid var(--border);
+    border-left: 3px solid var(--accent2);
+    border-radius: .5rem; padding: .75rem 1rem;
+  }
+  .q4-point-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: .1rem; }
+  .q4-point strong {
+    font-family: 'Syne', sans-serif; font-size: .85rem; font-weight: 700;
+    color: var(--heading); display: block; margin-bottom: .15rem;
+  }
+  .q4-point p { font-size: .78rem; color: var(--muted); margin: 0; line-height: 1.45; }
+
+  /* ─── COMPONENTS LIST (Q1 key components — title only) ─── */
+  .components-list {
+    list-style: none; padding: 0; margin: 1rem 0 1.5rem;
+    display: flex; flex-direction: column; gap: .5rem;
+  }
+  .components-list li {
+    display: flex; align-items: center; gap: .85rem;
+    font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 700;
+    color: var(--heading);
+    background: var(--surface); border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: .5rem; padding: .7rem 1.1rem;
+    transition: border-color .2s, background .2s;
+  }
+  .components-list li:hover { background: var(--surface2); border-left-color: var(--accent2); }
+  .comp-icon { font-size: 1.2rem; flex-shrink: 0; }
+
+  /* ─── VS GRID (visual comparison) ─── */
+  .vs-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 0; margin: 1.25rem 0 .5rem; align-items: stretch;
+  }
+  .vs-col {
+    border-radius: .75rem; padding: 1.25rem;
+    display: flex; flex-direction: column; gap: .6rem;
+  }
+  .vs-old { background: rgba(255,80,80,.06); border: 1px solid rgba(255,80,80,.15); }
+  .vs-new { background: rgba(0,201,167,.06); border: 1px solid rgba(0,201,167,.2); }
+  .vs-col-header {
+    font-family: 'Syne', sans-serif; font-size: .82rem; font-weight: 700;
+    color: var(--heading); margin-bottom: .4rem; padding-bottom: .5rem;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  .vs-item {
+    font-size: .82rem; color: var(--text); line-height: 1.45;
+    padding: .35rem 0; border-bottom: 1px solid rgba(255,255,255,.04);
+  }
+  .vs-item:last-child { border-bottom: none; }
+  .vs-label {
+    font-family: 'Syne', sans-serif; font-size: .68rem; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted); margin-right: .4rem;
+  }
+  .vs-divider {
+    display: flex; align-items: center; justify-content: center;
+    width: 3rem; font-family: 'Syne', sans-serif; font-size: .85rem;
+    font-weight: 800; color: var(--muted); letter-spacing: .05em;
+  }
+
+  /* ─── HIGHLIGHT QUOTE (Q4) ─── */
+  .highlight-quote {
+    background: var(--surface2);
+    border-radius: .75rem; padding: 1.5rem 1.75rem;
+    margin: 1.5rem 0; display: flex; gap: 1.25rem; align-items: flex-start;
+  }
+  .hq-bar {
+    width: 4px; flex-shrink: 0; border-radius: 2px;
+    background: linear-gradient(to bottom, var(--accent), var(--accent2));
+    align-self: stretch;
+  }
+  .highlight-quote p {
+    font-size: 1rem; color: var(--heading); line-height: 1.65;
+    font-style: italic; margin: 0 0 .5rem;
+  }
+  .highlight-quote cite {
+    font-size: .78rem; color: var(--accent2); font-style: normal;
+    font-family: 'Syne', sans-serif; font-weight: 600;
+  }
+
+  /* ─── SECTION STAT CALLOUT (Q3) ─── */
+  .section-stat-callout {
+    display: flex; gap: 0; margin: 1.25rem 0;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: .75rem; overflow: hidden;
+  }
+  .ssc-item { flex: 1; padding: 1.1rem 1.25rem; text-align: center; }
+  .ssc-divider { width: 1px; background: var(--border); align-self: stretch; }
+  .ssc-num {
+    font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800;
+    color: var(--accent); line-height: 1;
+  }
+  .ssc-label { font-size: .72rem; color: var(--muted); margin-top: .3rem; }
+
+  /* ─── THEOLOGY ICON STRIP ─── */
+  .theo-icon-strip {
+    display: flex; align-items: center; gap: .75rem;
+    margin-bottom: 1.25rem; flex-wrap: wrap;
+  }
+  .theo-icon-badge {
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+    border-radius: 2rem; padding: .35rem .9rem;
+    font-size: .78rem; color: var(--text); font-family: 'Syne', sans-serif;
+    font-weight: 600; letter-spacing: .04em;
+  }
+  .theo-icon-connector { color: var(--accent); font-size: .9rem; font-weight: 700; }
+
+  /* ─── THEOLOGY BRIDGE SENTENCE ─── */
+  .theo-bridge {
+    display: flex; align-items: center; justify-content: center;
+    gap: 1rem; padding: 1rem 0 .5rem;
+    font-family: 'Syne', sans-serif; font-size: .88rem; font-weight: 600;
+    color: var(--muted); letter-spacing: .04em;
+  }
+  .theo-bridge-arrow { color: var(--accent); font-size: 1.1rem; }
+
+  /* ─── CLOSING SLIDE ─── */
+  .closing-slide {
+    min-height: 100vh; display: flex; align-items: center;
+    justify-content: center; position: relative; overflow: hidden;
+    background: #050a08;
+  }
+  .closing-neural-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 70% 60% at 50% 50%, rgba(0,201,167,.12) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 20% 80%, rgba(91,141,238,.08) 0%, transparent 60%),
+      radial-gradient(ellipse 30% 30% at 80% 20%, rgba(0,201,167,.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .closing-neural-bg::after {
+    content: ''; position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='700' viewBox='0 0 900 700'%3E%3Cg stroke='%2300c9a7' stroke-width='0.5' opacity='0.12'%3E%3Cline x1='200' y1='100' x2='450' y2='250'/%3E%3Cline x1='450' y1='250' x2='700' y2='150'/%3E%3Cline x1='450' y1='250' x2='500' y2='450'/%3E%3Cline x1='500' y1='450' x2='700' y2='500'/%3E%3Cline x1='150' y1='400' x2='500' y2='450'/%3E%3Cline x1='150' y1='400' x2='200' y2='100'/%3E%3Cline x1='700' y1='150' x2='750' y2='400'/%3E%3Cline x1='750' y1='400' x2='700' y2='500'/%3E%3C/g%3E%3Cg fill='%2300c9a7' opacity='0.25'%3E%3Ccircle cx='200' cy='100' r='5'/%3E%3Ccircle cx='450' cy='250' r='8'/%3E%3Ccircle cx='700' cy='150' r='5'/%3E%3Ccircle cx='500' cy='450' r='6'/%3E%3Ccircle cx='700' cy='500' r='4'/%3E%3Ccircle cx='150' cy='400' r='4'/%3E%3Ccircle cx='750' cy='400' r='4'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: cover; background-position: center; opacity: .7;
+  }
+  .closing-content {
+    position: relative; z-index: 1; text-align: center;
+    max-width: 760px; padding: 3rem 2rem;
+  }
+  .closing-eyebrow {
+    font-family: 'Syne', sans-serif; font-size: .75rem; font-weight: 700;
+    letter-spacing: .3em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 1.25rem;
+  }
+  .closing-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800;
+    color: var(--heading); line-height: 1.15; letter-spacing: -.02em;
+    margin-bottom: 1.25rem;
+  }
+  .closing-title span { color: var(--accent); }
+  .closing-sub {
+    font-size: 1rem; color: var(--muted); max-width: 540px;
+    margin: 0 auto 2.5rem; line-height: 1.7;
+  }
+  .closing-questions {
+    display: flex; flex-direction: column; gap: .75rem; margin-bottom: 2.5rem;
+  }
+  .closing-q {
+    background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
+    border-radius: .5rem; padding: .75rem 1.5rem;
+    font-size: .9rem; color: var(--text); text-align: left;
+  }
+  .closing-invite {
+    font-family: 'Syne', sans-serif; font-size: .75rem; font-weight: 700;
+    letter-spacing: .25em; text-transform: uppercase; color: var(--accent2);
+  }
+  .closing-brain-img {
+    width: 180px; height: 180px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid rgba(0,201,167,.4);
+    box-shadow: 0 0 40px rgba(0,201,167,.25), 0 0 80px rgba(91,141,238,.1);
+    margin-bottom: 1.5rem;
+    display: block;
+  }
+  .closing-meta {
+    display: flex; align-items: center; justify-content: center;
+    gap: .75rem; flex-wrap: wrap;
+    font-family: 'Syne', sans-serif; font-size: .68rem; font-weight: 600;
+    letter-spacing: .08em; text-transform: uppercase; color: var(--muted);
+    margin-top: 2rem; padding-top: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,.08);
+  }
+  .closing-dot { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <h1>Neuromorphic <span>Computing</span></h1>
+  <p class="hero-sub">Brain-inspired hardware reshaping AI, computing, and our understanding of intelligence.</p>
+  <div class="hero-meta">
+    <span class="hero-pill">Brain-Inspired</span>
+    <span class="hero-pill">Spiking Neural Networks</span>
+    <span class="hero-pill">Edge AI</span>
+    <span class="hero-pill">Theological Implications</span>
+  </div>
+  <div class="hero-presenters">
+    <span class="hero-presenter">Tyson Shelton</span>
+    <span class="hero-presenter-divider">·</span>
+    <span class="hero-presenter">Jett Ropke</span>
+  </div>
+</header>
+
+<nav>
+  <a href="#definition">What Is It?</a>
+  <a href="#how-it-works">How It Works</a>
+  <a href="#current-apps">Current Applications</a>
+  <a href="#future-apps">Future Applications</a>
+  <a href="#theology">Theological Implications</a>
+  <a href="#references">References</a>
+  <a href="#closing">Closing</a>
+</nav>
+
+<!-- ══════════════════════════════
+  Q1 — DEFINITION
+══════════════════════════════ -->
+<section id="definition">
+  <p class="section-label">Question 1</p>
+  <h2>What Is Neuromorphic Computing?</h2>
+
+  <!-- Gamma-style layout: video thumbnail left + definition right, two cards below -->
+  <div class="q1-layout">
+    <div class="q1-left">
+      <a class="video-thumb-link" href="https://www.youtube.com/watch?v=6Dcs6fQglRA&t=151s" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/6Dcs6fQglRA/maxresdefault.jpg"
+             onerror="this.src='https://img.youtube.com/vi/6Dcs6fQglRA/hqdefault.jpg'"
+             alt="Architecture All Access: Neuromorphic Computing Part 1 — Intel">
+        <div class="video-play-btn">
+          <svg viewBox="0 0 68 48" width="68" height="48"><path d="M66.5 7.7c-.8-2.9-3-5.2-5.9-6C55.8 0 34 0 34 0S12.2 0 7.4 1.7C4.5 2.5 2.3 4.8 1.5 7.7 0 12.5 0 24 0 24s0 11.5 1.5 16.3c.8 2.9 3 5.2 5.9 6C12.2 48 34 48 34 48s21.8 0 26.6-1.7c2.9-.8 5.1-3.1 5.9-6C68 35.5 68 24 68 24s0-11.5-1.5-16.3z" fill="#ff0000"/><path d="M45 24L27 14v20" fill="#fff"/></svg>
+        </div>
+        <div class="video-timestamp-badge">▶ 2:31 – 4:35</div>
+      </a>
+      <p class="q1-video-label">▶ <em>Intel Architecture All Access — Watch 2:31–4:35</em></p>
+    </div>
+    <div class="q1-right">
+      <p class="q1-definition">Computing systems <strong>modeled after the human brain</strong> — using artificial neurons and synapses instead of binary logic to solve problems, recognize patterns, and make decisions.</p>
+    </div>
+  </div>
+  <div class="q1-cards">
+    <div class="q1-card">
+      <h4>Why Now</h4>
+      <p>AI compute demands double every few months — outpacing Moore's Law. Training GPT-scale models costs ~$1M per run.</p>
+    </div>
+    <div class="q1-card">
+      <h4>Key Advantage</h4>
+      <p>Memory and processing co-located on the same chip — eliminating the von Neumann bottleneck entirely.</p>
+    </div>
+  </div>
+
+  <button class="notes-toggle" onclick="toggleNotes(this)">
+    <span class="icon">🎤</span> <span class="arrow">▶</span> Speaker Notes
+  </button>
+  <div class="notes-body">
+    <p class="notes-key-line">🎯 <strong>Key sentence:</strong> "The brain doesn't use binary — it uses spikes. And that changes everything about how we build AI."</p>
+    <p>Neuromorphic computing is an approach in which computer components are modeled after the structure and function of the human brain and nervous system. Using artificial neurons and synapses, neuromorphic computers simulate the way our brains process information — allowing them to solve problems, recognize patterns, and make decisions more quickly and efficiently than the computers we commonly use today. <strong><sup class="cite"><a href="#references" title="See reference 3">[3]</a></sup></strong></p>
+    <p>A useful way to explain this to your audience: today's computers use bits — binary zeros and ones — they do additions and multiplications. But that is not how the brain computes. There is no addition, no subtraction in the brain. There is not even memory like a hard disk. The brain works on spikes — on events, on messages communicated from one neuron to the next. <strong><sup class="cite"><a href="#references" title="See reference 11">[11]</a></sup></strong></p>
+    <p>The Human Brain Project describes it as a discipline that builds physical models of neural computation — hardware that emulates biological neural network properties at the circuit and system level. The aim is computing platforms that are <em>energy-proportional</em>: consuming power in relation to task complexity. <strong><sup class="cite"><a href="#references" title="See reference 2">[2]</a></sup></strong></p>
+    <p>IBM Research frames neuromorphic computing as a necessary evolution. The scale of AI computations grows at a pace far outstripping Moore's Law. There are estimates that training a large AI model like ChatGPT once costs about $1 million — it is not sustainable to train many of these large systems or to run the computers that power them on today's energy budget. The reason they are so costly is that they compute over and over and over again, changing bits all the time, even when they don't really need to compute anything. <strong><sup class="cite"><a href="#references" title="See reference 1">[1]</a></sup><sup class="cite"><a href="#references" title="See reference 11">[11]</a></sup></strong></p>
+    <p>Conventional von Neumann computers physically separate memory from processing, forcing constant data transfer. This creates speed bottlenecks and wastes energy. Neuromorphic systems integrate both on the same substrate — like the brain — and only activate when there's something to compute. <strong><sup class="cite"><a href="#references" title="See reference 3">[3]</a></sup><sup class="cite"><a href="#references" title="See reference 9">[9]</a></sup></strong></p>
+  </div>
+
+  <h3>Key Components</h3>
+  <ul class="components-list">
+    <li><span class="comp-icon">🧠</span> Neuromorphic Chips</li>
+    <li><span class="comp-icon">⚡</span> Spiking Neural Networks</li>
+    <li><span class="comp-icon">🔀</span> Synaptic Plasticity</li>
+    <li><span class="comp-icon">📡</span> Event-Driven Processing</li>
+  </ul>
+  <button class="notes-toggle" onclick="toggleNotes(this)">
+    <span class="icon">🎤</span> <span class="arrow">▶</span> Speaker Notes — Key Components
+  </button>
+  <div class="notes-body">
+    <p><strong>Neuromorphic Chips:</strong> Specialized processors such as IBM's TrueNorth and Intel's Loihi are designed with artificial neurons and synapses that enable real-time learning and decision-making on a single chip. <strong><sup class="cite"><a href="#references" title="See reference 8">[8]</a></sup></strong></p>
+    <p><strong>Spiking Neural Networks (SNNs):</strong> Unlike traditional neural networks that pass smooth numerical values, SNNs transmit data through discrete electrical spikes — mirroring biological neuron communication — dramatically reducing energy use. <strong><sup class="cite"><a href="#references" title="See reference 3">[3]</a></sup></strong></p>
+    <p><strong>Synaptic Plasticity:</strong> Inspired by the brain's ability to adapt and learn, neuromorphic systems can strengthen or weaken connections based on experience, enabling continuous on-chip learning without needing to retrain in the cloud. <strong><sup class="cite"><a href="#references" title="See reference 8">[8]</a></sup></strong></p>
+    <p><strong>Event-Driven Processing:</strong> Components activate only when a meaningful event occurs — sharply reducing power consumption compared to always-on conventional processors. This is why neuromorphic chips are so attractive for battery-powered and edge devices. <strong><sup class="cite"><a href="#references" title="See reference 8">[8]</a></sup></strong></p>
+  </div>
+
+  <h3>By the Numbers</h3>
+  <div class="stat-row">
+    <div class="stat-box">
+      <div class="num">100×+</div>
+      <div class="label">More energy-efficient than GPUs for AI tasks</div>
+    </div>
+    <div class="stat-box">
+      <div class="num">1980s</div>
+      <div class="label">Carver Mead pioneers neuromorphic engineering</div>
+    </div>
+    <div class="stat-box">
+      <div class="num">~20W</div>
+      <div class="label">Power the human brain runs on — less than a light bulb</div>
+    </div>
+  </div>
+  <p class="table-note">Source: <sup class="cite"><a href="#references" title="See reference 9">[9]</a></sup></p>
+</section>
+
+<hr class="section-divider">
+
+<!-- ══════════════════════════════
+  Q2 — HOW IT WORKS
+══════════════════════════════ -->
+<section id="how-it-works">
+  <p class="section-label">Question 2</p>
+  <h2>How Does Neuromorphic Computing Work?</h2>
+
+  <!-- Gamma-style layout: neural image left half-bleed + four stacked colored cards right -->
+  <div class="q2-layout">
+    <div class="q2-left">
+      <div class="q2-neural-bg"></div>
+    </div>
+    <div class="q2-right">
+      <div class="q2-card q2-c1">
+        <h4>Brain Model</h4>
+        <p>Architectures mimic the <strong>neocortex</strong> — seat of perception, language, reasoning, and memory.</p>
+      </div>
+      <div class="q2-card q2-c2">
+        <h4>Spiking Neurons</h4>
+        <p>Artificial neurons fire only when input <strong>crosses a threshold</strong> — silent otherwise, saving energy.</p>
+      </div>
+      <div class="q2-card q2-c3">
+        <h4>In-Memory Computing</h4>
+        <p>Memory and processing <strong>co-located on chip</strong> — no data shuttling, no bottleneck.</p>
+      </div>
+      <div class="q2-card q2-c4">
+        <h4>Emergent Intelligence</h4>
+        <p>Complex behavior arises from <strong>collective node interaction</strong> — not isolated components.</p>
+      </div>
+    </div>
+  </div>
+
+  <button class="notes-toggle" onclick="toggleNotes(this)">
+    <span class="icon">🎤</span> <span class="arrow">▶</span> Speaker Notes
+  </button>
+  <div class="notes-body">
+    <p class="notes-key-line">🎯 <strong>Key sentence:</strong> "Neuromorphic chips only fire when something changes — just like your neurons. That's why they use a fraction of the energy."</p>
+    <p>Neuromorphic architectures are most often modeled after the neocortex — the region of the brain where higher cognitive functions like sensory perception, motor commands, spatial reasoning, and language occur. The neocortex's layered structure and intricate connectivity give it the ability to process complex information and enable human thinking. <strong><sup class="cite"><a href="#references" title="See reference 3">[3]</a></sup></strong></p>
+    <p>The brain's neurons communicate not with continuous voltage, but with brief, discrete electrical pulses called <em>spikes</em>. Neuromorphic computers replicate this through spiking neural networks (SNNs) — networks of artificial spiking neurons connected via artificial synaptic devices that transfer electrical signals between them. Each neuron holds an internal state and fires only when accumulated input crosses a threshold. <strong><sup class="cite"><a href="#references" title="See reference 3">[3]</a></sup></strong></p>
+    <p>A key point on energy: neurons in the brain only accumulate incoming information when there is new information — they only use energy when a new spike comes in, and they only send out a spike when there is something new to communicate. Conventional computers, by contrast, change bits all the time and compute over and over again even when they don't need to. That constant activity is what makes today's AI hardware so costly to run. <strong><sup class="cite"><a href="#references" title="See reference 11">[11]</a></sup></strong></p>
+    <p><strong>A useful analogy for your audience (from Conradt, TEDxKTH):</strong> Think of a medieval knight guarding a castle. If the guard works like a conventional camera, they report constantly — "tree, tree, river, river, river" — repeating everything they see over and over. That's how cameras and conventional computers work today: capturing and sending full images frame after frame, forcing downstream processors to handle mountains of redundant data. But a brain-inspired event camera works differently: each receptor only fires when something <em>changes</em> — when it gets brighter or darker. Only then does it send a spike. This is exactly how neuromorphic vision sensors work, and it's what makes them so much more efficient. <strong><sup class="cite"><a href="#references" title="See reference 11">[11]</a></sup></strong></p>
+    <p>Researchers at UC San Diego built a hardware platform from a quantum material called neodymium nickelate. When voltage pulses are applied, hydrogen ions move within the material and change its electrical resistance — giving nodes memory-like properties. All nodes interact through a shared substrate, so activity at one location influences its neighbors. The result was improved speed, accuracy, and energy efficiency in recognizing spoken digits and detecting epileptic seizures from brain-wave recordings. <strong><sup class="cite"><a href="#references" title="See reference 7">[7]</a></sup></strong></p>
+    <p>In the brain, intelligence does not arise from isolated neurons — it emerges from the rich, dynamic interactions of large networks collectively communicating across space and time. The latest neuromorphic platforms physically connect many nodes through shared materials, enabling emergent brain-like collective behavior rather than predefined circuit logic. <strong><sup class="cite"><a href="#references" title="See reference 7">[7]</a></sup></strong></p>
+  </div>
+
+  <h3>Neuromorphic vs. Traditional Computing</h3>
+  <div class="vs-grid">
+    <div class="vs-col vs-old">
+      <div class="vs-col-header">⚙️ Traditional (von Neumann)</div>
+      <div class="vs-item"><span class="vs-label">Data</span> Binary — 0s and 1s</div>
+      <div class="vs-item"><span class="vs-label">Processing</span> Sequential, clock-driven</div>
+      <div class="vs-item"><span class="vs-label">Memory</span> Separated from compute — creates bottleneck</div>
+      <div class="vs-item"><span class="vs-label">Energy</span> High — always active regardless of workload</div>
+      <div class="vs-item"><span class="vs-label">Learning</span> Offline, requires cloud retraining</div>
+    </div>
+    <div class="vs-divider">VS</div>
+    <div class="vs-col vs-new">
+      <div class="vs-col-header">🧠 Neuromorphic</div>
+      <div class="vs-item"><span class="vs-label">Data</span> Spike timing &amp; frequency</div>
+      <div class="vs-item"><span class="vs-label">Processing</span> Massively parallel, event-driven</div>
+      <div class="vs-item"><span class="vs-label">Memory</span> Co-located on same chip — no bottleneck</div>
+      <div class="vs-item"><span class="vs-label">Energy</span> Very low — fires on events only</div>
+      <div class="vs-item"><span class="vs-label">Learning</span> Continuous, on-chip plasticity</div>
+    </div>
+  </div>
+  <p class="table-note">Sources: <sup class="cite"><a href="#references" title="See reference 3">[3]</a></sup>; <sup class="cite"><a href="#references" title="See reference 6">[6]</a></sup></p>
+
+  <h3>UC San Diego Breakthrough (2026)</h3>
+  <div class="callout">
+    "By combining memory and computation on the same chip — and allowing its components to interact collectively like neurons in the brain — the brain-inspired platform improved the speed, accuracy and energy efficiency of pattern recognition."
+    <cite>— Labios, UC San Diego Today (March 11, 2026)</cite>
+  </div>
+
+  <h3>A Brief History</h3>
+  <div class="timeline-alt">
+    <div class="tl-line"></div>
+    <div class="tl-item tl-left">
+      <div class="tl-content">
+        <div class="tl-era">1930s–40s</div>
+        <p>Turing establishes theoretical groundwork for modern computing &amp; AI</p>
+      </div>
+      <div class="tl-node tl-n1">1</div>
+    </div>
+    <div class="tl-item tl-right">
+      <div class="tl-node tl-n2">2</div>
+      <div class="tl-content">
+        <div class="tl-era">1952</div>
+        <p>Hodgkin &amp; Huxley publish first mathematical neuron model — basis for SNNs</p>
+      </div>
+    </div>
+    <div class="tl-item tl-left">
+      <div class="tl-content">
+        <div class="tl-era">1980s</div>
+        <p>Carver Mead coins "neuromorphic engineering" — designs first brain-inspired circuits</p>
+      </div>
+      <div class="tl-node tl-n3">3</div>
+    </div>
+    <div class="tl-item tl-right">
+      <div class="tl-node tl-n4">4</div>
+      <div class="tl-content">
+        <div class="tl-era">2000s–2010s</div>
+        <p>IBM TrueNorth (2014), Intel Loihi (2017); Human Brain Project launches in Europe</p>
+      </div>
+    </div>
+    <div class="tl-item tl-left">
+      <div class="tl-content">
+        <div class="tl-era">2020s–Present</div>
+        <p>Systems scale to billions of neurons; commercial platforms begin to emerge</p>
+      </div>
+      <div class="tl-node tl-n5">5</div>
+    </div>
+  </div>
+  <button class="notes-toggle" onclick="toggleNotes(this)">
+    <span class="icon">🎤</span> <span class="arrow">▶</span> Speaker Notes — History
+  </button>
+  <div class="notes-body">
+    <p><strong>1930s–1940s:</strong> Alan Turing's pioneering work on computable functions demonstrated that machines could execute logical operations through algorithms, establishing the groundwork for modern computing and AI. <strong><sup class="cite"><a href="#references" title="See reference 9">[9]</a></sup></strong></p>
+    <p><strong>1952:</strong> Hodgkin and Huxley developed the first mathematical model of a neuron — forming the foundation for spiking neural networks and all subsequent neuromorphic research. <strong><sup class="cite"><a href="#references" title="See reference 9">[9]</a></sup></strong></p>
+    <p><strong>1980s:</strong> Carver Mead — often called the father of neuromorphic computing — coined the term and pioneered neuromorphic engineering, designing early systems to study brain processes experimentally. <strong><sup class="cite"><a href="#references" title="See reference 9">[9]</a></sup></strong></p>
+    <p><strong>2000s–2010s:</strong> IBM and Intel began major R&amp;D investments. IBM released TrueNorth in 2014; Intel released Loihi in 2017. The Human Brain Project launched large-scale neuromorphic research programs in Europe. <strong><sup class="cite"><a href="#references" title="See reference 9">[9]</a></sup><sup class="cite"><a href="#references" title="See reference 2">[2]</a></sup></strong></p>
+    <p><strong>2020s–Present:</strong> Neuromorphic systems scaled to billions of neurons. Gradient-based SNN training became mainstream. Commercial platforms began to emerge, and the field is widely described as reaching a critical inflection point. <strong><sup class="cite"><a href="#references" title="See reference 9">[9]</a></sup><sup class="cite"><a href="#references" title="See reference 10">[10]</a></sup></strong></p>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ══════════════════════════════
+  Q3 — CURRENT APPLICATIONS
+══════════════════════════════ -->
+<section id="current-apps">
+  <p class="section-label">Question 3</p>
+  <h2>Current Commercial Applications</h2>
+
+  <ul class="components-list">
+    <li><span class="comp-icon">🏠</span> Smart Homes &amp; Energy Management</li>
+    <li><span class="comp-icon">🏥</span> Healthcare &amp; Wearables</li>
+    <li><span class="comp-icon">🚗</span> Autonomous Vehicles</li>
+    <li><span class="comp-icon">🔐</span> Cybersecurity</li>
+    <li><span class="comp-icon">🤖</span> Robotics &amp; Automation</li>
+    <li><span class="comp-icon">⚙️</span> AI Accelerators</li>
+  </ul>
+
+  <div class="section-stat-callout">
+    <div class="ssc-item">
+      <div class="ssc-num">$213M</div>
+      <div class="ssc-label">Global market value in 2025</div>
+    </div>
+    <div class="ssc-divider"></div>
+    <div class="ssc-item">
+      <div class="ssc-num">6+</div>
+      <div class="ssc-label">Active commercial application areas today</div>
+    </div>
+    <div class="ssc-divider"></div>
+    <div class="ssc-item">
+      <div class="ssc-num">Edge</div>
+      <div class="ssc-label">Where neuromorphic excels — local, private, real-time</div>
+    </div>
+  </div>
+
+  <button class="notes-toggle" onclick="toggleNotes(this)">
+    <span class="icon">🎤</span> <span class="arrow">▶</span> Speaker Notes
+  </button>
+  <div class="notes-body">
+    <p>Neuromorphic computing's most compelling near-term advantage is its suitability for IoT and edge environments — situations where sending data to the cloud is too slow, too expensive, or too risky. Because neuromorphic chips process information locally with minimal energy, they allow devices to make real-time decisions without draining batteries or exposing data to network vulnerabilities. <strong><sup class="cite"><a href="#references" title="See reference 6">[6]</a></sup></strong></p>
+    <p>Cloud computing introduces significant challenges for IoT: data must travel back and forth creating latency; constant transmission drains batteries; large data volumes strain bandwidth; centralized storage creates larger cybersecurity attack surfaces; and systems depend on stable connectivity. Neuromorphic processing addresses all of these by moving intelligence directly to the device. <strong><sup class="cite"><a href="#references" title="See reference 6">[6]</a></sup></strong></p>
+    <p>In healthcare, UC San Diego demonstrated a neuromorphic platform that detected epileptic seizures from brain-wave recordings and recognized spoken digits — with improved speed, accuracy, and energy efficiency. The compact nature of neuromorphic chips makes them ideal for wearable health monitors. <strong><sup class="cite"><a href="#references" title="See reference 7">[7]</a></sup><sup class="cite"><a href="#references" title="See reference 8">[8]</a></sup></strong></p>
+    <p>For autonomous vehicles, processing multiple asynchronous sensor streams with near-zero latency directly in the vehicle is critical for safe real-time navigation — something neuromorphic chips are uniquely positioned to deliver. <strong><sup class="cite"><a href="#references" title="See reference 6">[6]</a></sup><sup class="cite"><a href="#references" title="See reference 3">[3]</a></sup></strong></p>
+  </div>
+
+  <h3>Six Key Application Areas</h3>
+  <div class="app-grid">
+    <div class="app-item">
+      <div class="app-icon">🏠</div>
+      <h4>Smart Homes &amp; Energy Management</h4>
+      <p>Neuromorphic chips learn your habits and adjust heating, cooling, and lighting automatically — all processed locally on the device with no cloud connection needed. This means faster response times, better privacy, and dramatically lower energy use than cloud-dependent smart home systems.</p>
+    </div>
+    <div class="app-item">
+      <div class="app-icon">🏥</div>
+      <h4>Healthcare &amp; Wearables</h4>
+      <p>Researchers at UC San Diego demonstrated a neuromorphic platform that detected epileptic seizures in real time from wearable EEG brain-wave recordings. Because the chip processes data locally on the body, there is no latency, no battery drain from cloud transmission, and no privacy risk — critical for life-saving medical devices. <sup class="cite"><a href="#references" title="See reference 7">[7]</a></sup></p>
+    </div>
+    <div class="app-item">
+      <div class="app-icon">🚗</div>
+      <h4>Autonomous Vehicles</h4>
+      <p>Self-driving cars must process streams of data from cameras, radar, and lidar simultaneously — in milliseconds. Neuromorphic chips handle this with near-zero latency directly in the vehicle, eliminating dependence on cloud connectivity. For a vehicle traveling at 60 mph, even a one-second delay can be fatal. <sup class="cite"><a href="#references" title="See reference 6">[6]</a></sup></p>
+    </div>
+    <div class="app-item">
+      <div class="app-icon">🔐</div>
+      <h4>Cybersecurity</h4>
+      <p>Neuromorphic systems excel at pattern recognition and anomaly detection — the core tasks of cybersecurity. By running threat detection on-device rather than in the cloud, they can identify and respond to attacks in real time without exposing sensitive data to external servers, and without the latency that makes cloud-based detection vulnerable. <sup class="cite"><a href="#references" title="See reference 8">[8]</a></sup></p>
+    </div>
+    <div class="app-item">
+      <div class="app-icon">🤖</div>
+      <h4>Robotics &amp; Automation</h4>
+      <p>Factory robots and autonomous drones need to react to their environment instantly — the way a human hand pulls back from heat before the brain consciously registers pain. Neuromorphic hardware provides that reflex-like speed. A robot on a neuromorphic chip can process sensory input and adjust its movements in real time, making manufacturing safer and more precise. <sup class="cite"><a href="#references" title="See reference 8">[8]</a></sup></p>
+    </div>
+    <div class="app-item">
+      <div class="app-icon">⚙️</div>
+      <h4>AI Accelerators</h4>
+      <p>Training and running AI models on GPUs consumes enormous amounts of power — one GPT-scale training run costs around $1 million in energy. Neuromorphic co-processors can handle AI inference tasks at a fraction of that cost, making always-on AI practical in phones, sensors, and edge devices that run on small batteries. <sup class="cite"><a href="#references" title="See reference 1">[1]</a></sup></p>
+    </div>
+  </div>
+
+  <!-- VIDEO: Intel Architecture All Access — 8:30 to 8:57, placed after six key applications -->
+  <div class="video-embed-wrap">
+    <div class="video-label">
+      <span class="vid-icon">▶</span> Intel Architecture All Access &nbsp;·&nbsp; Neuromorphic Computing Part 1
+      <span>— Intel Technology</span>
+    </div>
+    <a class="video-thumb-link" href="https://www.youtube.com/watch?v=6Dcs6fQglRA&t=510s" target="_blank" rel="noopener">
+      <img src="https://img.youtube.com/vi/6Dcs6fQglRA/maxresdefault.jpg"
+           onerror="this.src='https://img.youtube.com/vi/6Dcs6fQglRA/hqdefault.jpg'"
+           alt="Architecture All Access: Neuromorphic Computing Part 1 — Intel">
+      <div class="video-play-btn">
+        <svg viewBox="0 0 68 48" width="68" height="48"><path d="M66.5 7.7c-.8-2.9-3-5.2-5.9-6C55.8 0 34 0 34 0S12.2 0 7.4 1.7C4.5 2.5 2.3 4.8 1.5 7.7 0 12.5 0 24 0 24s0 11.5 1.5 16.3c.8 2.9 3 5.2 5.9 6C12.2 48 34 48 34 48s21.8 0 26.6-1.7c2.9-.8 5.1-3.1 5.9-6C68 35.5 68 24 68 24s0-11.5-1.5-16.3z" fill="#ff0000"/><path d="M45 24L27 14v20" fill="#fff"/></svg>
+      </div>
+      <div class="video-timestamp-badge">▶ 8:30 – 8:57</div>
+    </a>
+    <div class="video-caption"><strong>Click to open on YouTube at 8:30</strong> — Intel highlights real-world application examples of neuromorphic computing in action. Stop at 8:57. Plays immediately after your six application cards to reinforce them with a live industry demonstration.</div>
+  </div>
+
+  <h3>Leading Hardware Platforms</h3>
+  <table class="compare-table">
+    <thead>
+      <tr><th>Platform</th><th>Organization</th><th>Key Feature</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>TrueNorth</td><td>IBM</td>
+        <td>256M programmable synapses; 4,096 cores</td>
+        <td><span class="tag">Research</span></td>
+      </tr>
+      <tr>
+        <td>Loihi / Loihi 2</td><td>Intel Labs</td>
+        <td>On-chip learning; 10× faster than gen 1</td>
+        <td><span class="tag">Active R&amp;D</span></td>
+      </tr>
+      <tr>
+        <td>SpiNNaker</td><td>Human Brain Project</td>
+        <td>Massively parallel neural simulation</td>
+        <td><span class="tag">Research</span></td>
+      </tr>
+      <tr>
+        <td>Neodymium nickelate</td><td>UC San Diego</td>
+        <td>Quantum material; collective node behavior</td>
+        <td><span class="tag">Research (2026)</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="table-note">Sources: <sup class="cite"><a href="#references" title="See reference 1">[1]</a></sup>; <sup class="cite"><a href="#references" title="See reference 2">[2]</a></sup>; <sup class="cite"><a href="#references" title="See reference 7">[7]</a></sup>; <sup class="cite"><a href="#references" title="See reference 8">[8]</a></sup></p>
+</section>
+
+<hr class="section-divider">
+
+<!-- ══════════════════════════════
+  Q4 — FUTURE APPLICATIONS
+══════════════════════════════ -->
+<section id="future-apps">
+  <p class="section-label">Question 4</p>
+  <h2>Future Commercial Applications</h2>
+
+  <div class="q4-overview">
+    <div class="q4-stat-pair">
+      <div class="q4-stat">
+        <div class="q4-stat-num">$213M</div>
+        <div class="q4-stat-arrow">→</div>
+        <div class="q4-stat-num q4-stat-future">$1.6B+</div>
+        <div class="q4-stat-label">Market growth · 2025 to 2034 · 21.8% CAGR <sup class="cite"><a href="#references" title="See reference 9">[9]</a></sup></div>
+      </div>
+    </div>
+    <div class="q4-points">
+      <div class="q4-point">
+        <span class="q4-point-icon">🚀</span>
+        <div>
+          <strong>Inflection Point</strong>
+          <p>Transitioning from experimental research to commercially viable deployment</p>
+        </div>
+      </div>
+      <div class="q4-point">
+        <span class="q4-point-icon">🔄</span>
+        <div>
+          <strong>Paradigm Shift</strong>
+          <p>Not a hardware upgrade — enables AI where today's approaches are entirely unsuitable</p>
+        </div>
+      </div>
+      <div class="q4-point">
+        <span class="q4-point-icon">⚡</span>
+        <div>
+          <strong>Key Drivers</strong>
+          <p>Semiconductor limits · Automotive edge AI · IoT device explosion</p>
+        </div>
+      </div>
+      <div class="q4-point">
+        <span class="q4-point-icon">🌍</span>
+        <div>
+          <strong>Growth Leaders</strong>
+          <p>North America leads adoption · Asia-Pacific grows fastest</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-quote">
+    <div class="hq-bar"></div>
+    <p>"Neuromorphic computing is not a hardware upgrade — it's a paradigm shift enabling AI where today's approaches are entirely unsuitable: undersea, in space, on the battlefield, inside the body."</p>
+    <cite>— Atos <sup class="cite"><a href="#references" title="See reference 10">[10]</a></sup></cite>
+  </div>
+
+  <button class="notes-toggle" onclick="toggleNotes(this)">
+    <span class="icon">🎤</span> <span class="arrow">▶</span> Speaker Notes
+  </button>
+  <div class="notes-body">
+    <p><sup class="cite"><a href="#references" title="See reference 9">[9]</a></sup> identifies neuromorphic computing as being at a pivotal transition point — moving from experimental research toward commercially viable deployment. Continuous investment at both industry and academic levels is driving rapid advances in hardware and software that will open new markets across the coming decade.</p>
+    <p>BCC Research highlights three primary forces shaping commercial trajectory: semiconductor miniaturization pushing chip designers toward brain-inspired architectures as transistor-scaling limits are reached; the automotive sector's urgent demand for low-latency, energy-efficient edge AI in autonomous vehicles; and the explosion of IoT deployments creating massive appetite for local intelligence that can operate indefinitely on small power budgets. <strong><sup class="cite"><a href="#references" title="See reference 9">[9]</a></sup></strong></p>
+    <p>Atos frames neuromorphic computing not as a hardware upgrade but as a paradigm shift for AI — one that will make AI practical in environments where today's approaches are entirely unsuitable: deep undersea, in space, on the battlefield, inside the body, and embedded in the infrastructure of everyday life. Companies building neuromorphic competency now will be better positioned to reduce costs, enhance privacy, and deliver next-generation experiences. <strong><sup class="cite"><a href="#references" title="See reference 10">[10]</a></sup></strong></p>
+    <p>The global neuromorphic computing market was valued at approximately $213 million in 2025 and is projected to exceed $1.6 billion by 2034, growing at a compound annual growth rate of 21.8%. North America currently leads adoption, while Asia-Pacific is expected to grow fastest, driven by semiconductor investment and the automotive sector. <strong><sup class="cite"><a href="#references" title="See reference 9">[9]</a></sup></strong></p>
+  </div>
+
+  <h3>Sectors Poised for Transformation</h3>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon">🧬</div>
+      <h4>Advanced Healthcare</h4>
+      <p>Brain-computer interfaces, prosthetics, real-time neural diagnosis on always-on neuromorphic chips</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🏙️</div>
+      <h4>Smart Cities</h4>
+      <p>Distributed edge nodes managing traffic, power grids &amp; environment at city scale</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">⌚</div>
+      <h4>Wearables &amp; Implants</h4>
+      <p>Continuous on-body health monitoring — no cloud, no battery drain</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🌾</div>
+      <h4>Precision Agriculture</h4>
+      <p>Smart field sensors for crop monitoring &amp; irrigation in remote environments</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🗣️</div>
+      <h4>On-Device AI</h4>
+      <p>Real-time translation &amp; voice AI — fully local, privacy-preserving</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">⚡</div>
+      <h4>Energy &amp; Infrastructure</h4>
+      <p>Optimizing power grids, renewables &amp; industrial maintenance with far lower compute costs</p>
+    </div>
+  </div>
+  <button class="notes-toggle" onclick="toggleNotes(this)">
+    <span class="icon">🎤</span> <span class="arrow">▶</span> Speaker Notes — Future Sectors
+  </button>
+  <div class="notes-body">
+    <p><strong>Advanced Healthcare:</strong> Brain-computer interfaces, next-generation prosthetics, and real-time neural disorder diagnosis powered by always-on, ultra-low-power neuromorphic chips. <strong><sup class="cite"><a href="#references" title="See reference 8">[8]</a></sup></strong></p>
+    <p><strong>Smart Cities:</strong> Distributed neuromorphic edge nodes managing traffic flows, power grids, and environmental monitoring at city scale with near-zero energy budgets. <strong><sup class="cite"><a href="#references" title="See reference 10">[10]</a></sup><sup class="cite"><a href="#references" title="See reference 8">[8]</a></sup></strong></p>
+    <p><strong>Wearable &amp; Implantable Devices:</strong> Compact neuromorphic processors monitoring vital signs and delivering adaptive health interventions — continuously, on the body, without cloud connectivity. <strong><sup class="cite"><a href="#references" title="See reference 7">[7]</a></sup><sup class="cite"><a href="#references" title="See reference 10">[10]</a></sup></strong> Conradt envisions neuromorphic systems assembled into low-energy mobile devices that can guide us in everyday tasks — worn as glasses or similar wearables, or built into mobile robotics — requiring a significantly lower energy budget compared to what today's technology needs to be "smart." <strong><sup class="cite"><a href="#references" title="See reference 11">[11]</a></sup></strong></p>
+    <p><strong>Precision Agriculture:</strong> Ultra-efficient smart farming sensors performing real-time crop monitoring, pest detection, and irrigation control in remote field environments. <strong><sup class="cite"><a href="#references" title="See reference 6">[6]</a></sup></strong></p>
+    <p><strong>On-Device AI &amp; NLP:</strong> Real-time translation, voice recognition, and personalized AI assistants running entirely on neuromorphic co-processors — privacy-preserving and cloud-free. <strong><sup class="cite"><a href="#references" title="See reference 10">[10]</a></sup><sup class="cite"><a href="#references" title="See reference 3">[3]</a></sup></strong></p>
+    <p><strong>Energy &amp; Infrastructure:</strong> Neuromorphic systems optimizing power grids, renewable energy storage, and predictive maintenance for industrial infrastructure with radically lower compute costs. <strong><sup class="cite"><a href="#references" title="See reference 9">[9]</a></sup><sup class="cite"><a href="#references" title="See reference 10">[10]</a></sup></strong></p>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ══════════════════════════════
+  Q5 — THEOLOGICAL IMPLICATIONS
+══════════════════════════════ -->
+<section id="theology">
+  <p class="section-label">Question 5</p>
+  <h2>Theological Implications</h2>
+
+  <!-- ── 5a BIBLICAL ANALYSIS ── -->
+  <div class="theo-block theo-a">
+    <div class="theo-header">
+      <span class="theo-icon">📖</span>
+      <h3>5a · Biblical &amp; Theological Analysis</h3>
+    </div>
+    <div class="theo-icon-strip">
+      <div class="theo-icon-badge">🧠 Brain</div>
+      <div class="theo-icon-connector">↔</div>
+      <div class="theo-icon-badge">✝️ Faith</div>
+      <div class="theo-icon-connector">→</div>
+      <div class="theo-icon-badge">💡 Understanding</div>
+    </div>
+
+    <div class="theo-verse-row">
+      <div class="theo-verse">
+        <div class="theo-ref">Genesis 1:26–27</div>
+        <p>"So God created mankind in his own image."</p>
+        <p class="theo-apply">The <em>imago Dei</em> includes the capacity to create and reason. Building brain-inspired technology is an expression of that image-bearing creativity — we honor God by studying what He designed.</p>
+      </div>
+      <div class="theo-verse">
+        <div class="theo-ref">Psalm 139:14</div>
+        <p>"I am fearfully and wonderfully made."</p>
+        <p class="theo-apply">Every spiking neural network engineers build is a pale imitation of what God already made. Neuromorphic computing doesn't reduce the brain to a machine — it reveals how extraordinary the original design truly is.</p>
+      </div>
+    </div>
+
+    <div class="theo-verse-row">
+      <div class="theo-verse">
+        <div class="theo-ref">Proverbs 3:19</div>
+        <p>"By wisdom the Lord laid the earth's foundations."</p>
+        <p class="theo-apply">God created with wisdom. We are called to do the same — deploying this technology with ethical discernment and care for human dignity.</p>
+      </div>
+      <div class="theo-verse">
+        <div class="theo-ref">Genesis 2:7</div>
+        <p>"God breathed into his nostrils the breath of life."</p>
+        <p class="theo-apply">No neuromorphic chip has ever had life breathed into it by God. The human brain houses something silicon never will — a spirit. Computational mimicry and spiritual reality are categorically different.</p>
+      </div>
+    </div>
+
+    <div class="theo-divider-box">
+      <span class="theo-divider-label">The Defining Distinction</span>
+      <p>A neuromorphic chip can process one billion spikes per second. <strong>It cannot pray.</strong> Communion with God — prayer, worship, faith, grace — is not computational. It is spiritual, and it belongs exclusively to beings made in the image of a personal God.</p>
+    </div>
+  </div>
+
+  <!-- ── 5b PERSONAL REFLECTION ── -->
+  <div class="theo-block theo-b">
+    <div class="theo-header">
+      <span class="theo-icon">🙏</span>
+      <h3>5b · Personal Theological Reflection</h3>
+    </div>
+
+    <div class="theo-reflection-grid">
+      <div class="theo-r-card">
+        <div class="theo-r-icon">✨</div>
+        <h4>It Begins with Awe</h4>
+        <p>The deeper engineers go into the brain's architecture, the more extraordinary God's original design becomes. Trying to replicate it in silicon only reveals how far beyond human engineering it truly is.</p>
+      </div>
+      <div class="theo-r-card">
+        <div class="theo-r-icon">🧱</div>
+        <h4>Awe Leads to Honest Limits</h4>
+        <p>We can model the brain's structure and replicate its efficiency in silicon. What no engineering process has ever done is manufacture a soul. We are copying something we did not originate.</p>
+      </div>
+      <div class="theo-r-card">
+        <div class="theo-r-icon">⚖️</div>
+        <h4>Limits Lead to Stewardship</h4>
+        <p>This technology is powerful but bounded. As neuromorphic systems enter hospitals, cities, and wearables, we must ask: who benefits, who bears the risk, and are we building with wisdom?</p>
+      </div>
+      <div class="theo-r-card theo-r-question">
+        <div class="theo-r-icon">❓</div>
+        <h4>A Question Worth Considering</h4>
+        <p><em>Is there something the human brain does that no amount of computational sophistication could ever replicate — and if so, what does that tell us about what it means to be human?</em></p>
+      </div>
+    </div>
+
+    <div class="theo-closing">
+      <p>"The heavens declare the glory of God." — Psalm 19:1</p>
+      <p class="theo-closing-body">We study the brain, we model it, we marvel at it — and in doing so, we are invited to ask the deepest questions about who we are, and what it means that only one kind of mind was made to know its Creator.</p>
+    </div>
+  </div>
+
+  <button class="notes-toggle" onclick="toggleNotes(this)">
+    <span class="icon">🎤</span> <span class="arrow">▶</span> Speaker Notes — Theological Implications
+  </button>
+  <div class="notes-body">
+    <p class="notes-key-line">🎯 <strong>Key sentence:</strong> "The more we study the brain, the more remarkable the original design becomes — and that's exactly what Psalm 139:14 said all along."</p>
+    <p><strong>Opening framing:</strong> Begin by acknowledging that this question — what does faith say about building brain-inspired machines — is not a threat to faith. It is one of the most interesting questions faith can engage with. Neuromorphic computing invites us to think more carefully about what it means to be human.</p>
+    <p><strong>On imago Dei (Genesis 1:26–27):</strong> The image of God in humanity includes rationality, creativity, and the capacity to understand and shape the world. When scientists build neuromorphic systems, they are exercising precisely that image-bearing creativity. This is not hubris — it is humanity doing what it was made to do. The question is whether we do it wisely and humbly.</p>
+    <p><strong>On Psalm 139:14:</strong> Use this verse to create a moment of wonder in the room. The human brain operates on roughly 20 watts — less than a light bulb — and outperforms the most powerful AI supercomputers on almost every cognitive measure. Neuromorphic engineers spend careers trying to approximate what God designed in a three-pound organ. That should produce worship, not worry.</p>
+    <p><strong>On Proverbs 3:19 and stewardship:</strong> The call here is practical. As neuromorphic technology enters healthcare, defense, surveillance, and everyday devices, Christians have a responsibility to ask hard ethical questions. Who benefits? Who is at risk? Is this technology being deployed with the wisdom God calls us to exercise?</p>
+    <p><strong>On Genesis 2:7 — the breath of life:</strong> This is your strongest theological point. The distinction between a brain-inspired chip and a human being is not quantitative — it is categorical. God breathed life into humanity. No engineering process replicates that. The soul is not an emergent property of sufficiently complex neural networks. It is a gift from a personal God to beings made for relationship with Him.</p>
+    <p><strong>On the brain's unique spiritual capacity:</strong> Scientifically, we have no neurological explanation for prayer, spiritual experience, or the sense of the transcendent. Scripturally, it is clear: humans alone bear God's image and are designed for communion with Him. A neuromorphic chip may one day process a billion spikes per second — but it will never cry out, "My God, my God." That remains the exclusive territory of the being God breathed into existence.</p>
+    <p><strong>Closing thought:</strong> End with confidence, not caution. Faith-affirming engagement with neuromorphic computing says: study it, steward it wisely, and let it remind you of the extraordinary genius of the God who designed the original.</p>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ══════════════════════════════
+  CLOSING SLIDE
+══════════════════════════════ -->
+<section id="closing" class="closing-slide">
+  <div class="closing-neural-bg"></div>
+  <div class="closing-content">
+    <img src="data:image/jpeg;base64,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" class="closing-brain-img" alt="Neuromorphic brain illustration">
+    <p class="closing-eyebrow">Neuromorphic Computing</p>
+    <h2 class="closing-title">Thank <span>You</span></h2>
+    <p class="closing-sub">Brain-inspired hardware reshaping AI, computing, and our understanding of intelligence.</p>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ══════════════════════════════
+  REFERENCES
+══════════════════════════════ -->
+<div class="references-wrap">
+<section id="references">
+  <p class="section-label">Sources</p>
+  <h2>References</h2>
+  <p style="color:var(--muted); font-size:.82rem; margin-bottom:1rem;">APA 7th edition · Only the provided sources are listed.</p>
+
+  <p class="ref-section-label" style="border-top:none; padding-top:0; margin-top:0;">Question 1 — What Is Neuromorphic Computing?</p>
+  <ol class="ref-list">
+    <li id="ref-1">IBM Research. (n.d.). <em>What is neuromorphic or brain-inspired computing?</em> IBM Research Blog. <a href="https://research.ibm.com/blog/what-is-neuromorphic-or-brain-inspired-computing" target="_blank" rel="noopener">https://research.ibm.com/blog/what-is-neuromorphic-or-brain-inspired-computing</a></li>
+    <li id="ref-2">Human Brain Project. (n.d.). <em>Neuromorphic computing.</em> Human Brain Project Science &amp; Development. <a href="https://www.humanbrainproject.eu/en/science-development/focus-areas/neuromorphic-computing/" target="_blank" rel="noopener">https://www.humanbrainproject.eu/en/science-development/focus-areas/neuromorphic-computing/</a></li>
+  </ol>
+
+  <p class="ref-section-label">Question 2 — How Does Neuromorphic Computing Work?</p>
+  <ol class="ref-list" style="counter-reset:ref 2;">
+    <li id="ref-3">Glover, E., &amp; Urwin, M. (2024, December 10). <em>What is neuromorphic computing?</em> Built In. <a href="https://builtin.com/artificial-intelligence/neuromorphic-computing" target="_blank" rel="noopener">https://builtin.com/artificial-intelligence/neuromorphic-computing</a></li>
+    <li id="ref-4">IntechOpen. (n.d.). <em>Neuromorphic computing</em> [Book chapter 86207]. IntechOpen. <a href="https://www.intechopen.com/chapters/86207" target="_blank" rel="noopener">https://www.intechopen.com/chapters/86207</a></li>
+    <li id="ref-5">Los Alamos National Laboratory. (n.d.). <em>Neuromorphic computing.</em> <em>1663 — Los Alamos Science &amp; Technology Magazine.</em> <a href="https://www.lanl.gov/media/publications/1663/1269-neuromorphic-computing" target="_blank" rel="noopener">https://www.lanl.gov/media/publications/1663/1269-neuromorphic-computing</a></li>
+  </ol>
+
+  <p class="ref-section-label">Question 3 — Current Commercial Applications</p>
+  <ol class="ref-list" style="counter-reset:ref 5;">
+    <li id="ref-6">Hecks, E. (2025, April 4). <em>5 applications of neuromorphic computing in IoT.</em> IoT Insider. <a href="https://www.iotinsider.com/iot-insights/industry-insights/5-applications-of-neuromorphic-computing-in-iot/" target="_blank" rel="noopener">https://www.iotinsider.com/iot-insights/industry-insights/5-applications-of-neuromorphic-computing-in-iot/</a></li>
+    <li id="ref-7">Labios, L. (2026, March 11). <em>Brain-inspired device could lead to faster, more energy-efficient AI hardware.</em> UC San Diego Today. <a href="https://today.ucsd.edu/story/brain-inspired-device-could-lead-to-faster-more-energy-efficient-ai-hardware" target="_blank" rel="noopener">https://today.ucsd.edu/story/brain-inspired-device-could-lead-to-faster-more-energy-efficient-ai-hardware</a></li>
+    <li id="ref-8">Meegle. (2026, February 6). <em>Neuromorphic computing applications.</em> Meegle Topics. <a href="https://www.meegle.com/en_us/topics/neuromorphic-engineering/neuromorphic-computing-applications" target="_blank" rel="noopener">https://www.meegle.com/en_us/topics/neuromorphic-engineering/neuromorphic-computing-applications</a></li>
+  </ol>
+
+  <p class="ref-section-label">Question 4 — Future Commercial Applications</p>
+  <ol class="ref-list" style="counter-reset:ref 8;">
+    <li id="ref-9">BCC Research. (2025, November 17). <em>Neuromorphic computing: Driving the future of brain-inspired technology.</em> BCC Research Industry Trends. <a href="https://www.bccresearch.com/industry-trends/neuromorphic-computing-industry-trends" target="_blank" rel="noopener">https://www.bccresearch.com/industry-trends/neuromorphic-computing-industry-trends</a></li>
+    <li id="ref-10">Atos. (n.d.). <em>Neuromorphic computing: The future of AI and beyond.</em> Atos Blog. <a href="https://atos.net/en/blog/neuromorphic-computing-the-future-of-ai-and-beyond" target="_blank" rel="noopener">https://atos.net/en/blog/neuromorphic-computing-the-future-of-ai-and-beyond</a></li>
+  </ol>
+
+  <p class="ref-section-label">Supporting Video Source — Used Throughout</p>
+  <ol class="ref-list" style="counter-reset:ref 10;">
+    <li id="ref-11">Conradt, J. (n.d.). <em>Energy-efficient neuromorphic computing</em> [Video]. TEDxKTH. <a href="https://www.youtube.com/watch?v=FqnuDilYj2c" target="_blank" rel="noopener">https://www.youtube.com/watch?v=FqnuDilYj2c</a></li>
+  </ol>
+</section>
+</div>
+
+<script>
+  function toggleNotes(btn) {
+    const notes = btn.nextElementSibling;
+    const isOpen = notes.classList.toggle('open');
+    btn.classList.toggle('open', isOpen);
+  }
+</script>
+</body>
+</html>
